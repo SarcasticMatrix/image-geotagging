@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<head>
+ <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script> 
+
+
+<canvas id=c width=600 height=300></canvas>
+<input type=file>
+<input value="start" type="button"> 
+
+
+<script> 
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
+delay(5000).then(() => console.log('ran after 1 second1 passed'));
+
+window.URL = window.URL || window.webkitURL; 
+document.querySelector("input").onchange = function(e) {
+
+var file = e.target.files[0],                  // reference first file BLOB
+    url = URL.createObjectURL(file),           // create Object URL
+    img = new Image();                         // create image object
+  
+  img.onload = function() {                    
+    c.getContext("2d").drawImage(this, 0, 0);  // draw image onto canvas 
+  };
+
+  img.src = url;                               // convertion file to image
+};
+
+
+var idata = c.getContext('2d').getImageData(0, 0, 600,300);
+console.log(idata);
+const path_model = "MyModel/model.json";
+const ListeDep = ["Dep1", "Dep2", "Dep3", "Dep4", "Dep5", "Dep6", "Dep7", "Dep8", "Dep9", "Dep10", "Dep11", "Dep12",];
+const MyImage = tf.browser.fromPixels(idata);
+const MyImage2=tf.reshape(MyImage,[1,300,600,3]);
+
+
+
+let func= async function(){
+    const model= await tf.loadLayersModel(path_model);
+    const res = model.predict(MyImage2);
+    console.log(res);
+
+    //document.write(res);
+    document.getElementById("resultat").innerHTML = res;
+    const max = Math.max(res);
+    const z = res.indexOf(max);
+    console.log(String(z));
+    console.log(ListeDep[z]);
+
+    document.write(ListeDep[z]);
+
+};
+
+func();
+
+</script>
+
+<h1>"Résultats : " <span id="resultat"></span></h1>
+
+ </head>
