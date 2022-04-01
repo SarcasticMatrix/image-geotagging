@@ -1,0 +1,21 @@
+Documentation
+
+
+
+
+Partie 0
+
+
+Utilisation pratique du site
+Étape 1: créer un dossier SiteFolder contenant le fichier index.html
+Étape 2: ajouter dans ce dossier, un dossier Mymodel qui contient model.json et un fichier .bin
+Étape 3 :installer http-server  ( npm install http-server dans un terminal )
+Étape 4:lancer le serveur local SiteFolder ( cd X/SiteFolder )
+Étape 5 : dans votre navigateur favori ( firefox de préférence) charger localhost ( port affiché sur le terminal)
+Étape 6:  charger l’image(dimension 300*600px sinon elle sera tronquée à ces dimensions)
+Étape 7: appuyer sur le bouton lancer l’IA
+
+Le tensor des résultats apparaît alors sur votre écran
+
+Front-end : Work In Progress
+
