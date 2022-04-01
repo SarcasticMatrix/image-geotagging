@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 
 <head>
- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script> 
+  <title>livrable 2</title>
+</head>
+<body>
+  <canvas id=c width=600 height=300></canvas>
+  <input type=file id="IAImage">
+  <h1>"Résultats : " <span id="resultat"></span></h1>
+  <input type="button" id="startIaButton" value="lancer l'IA">
 
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      window.URL = window.URL || window.webkitURL; 
+      document.querySelector("input").onchange = function(e) {
 
-<canvas id=c width=600 height=300></canvas>
-<input type=file>
-<input value="start" type="button"> 
+      var file = e.target.files[0],                  // reference first file BLOB
+          url = URL.createObjectURL(file),           // create Object URL
+          img = new Image();                         // create image object
+          img.src = url;                               // convertion file to image
 
+        img.onload = function() {                    
+          c.getContext("2d").drawImage(img, 0, 0);  // draw image onto canvas 
+          console.log(c);   
+        };
 
-<script> 
+      };
 
-function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
+      //----------------------------------------------------------------------
+      //load le model et prédit le résultat de l'image et renvoie le résultat
+      //----------------------------------------------------------------------
+      let func= async function(MyImage2){
+        const path_model = "Mymodel/model.json";
 
-delay(5000).then(() => console.log('ran after 1 second1 passed'));
+        const model= await tf.loadLayersModel(path_model);
+        const res = model.predict(MyImage2);
+        console.log(res);
+        document.getElementById("resultat").innerHTML = res;
+        /*
+        const max = Math.max(res);  
+        const z = res.indexOf(max);
+        console.log(String(z));
+        console.log(ListeDep[z]);
+        document.write(ListeDep[z]);
+        */
+      };
+      
+      //----------------------------------------------------------------------
+      // appelle la fonction asynchrone en appuyant sur le bouton
+      //----------------------------------------------------------------------
+      $("#startIaButton").click(function () {
+        var idata = c.getContext('2d').getImageData(0, 0, 600,300);
 
-window.URL = window.URL || window.webkitURL; 
-document.querySelector("input").onchange = function(e) {
+        console.log(c);
+        console.log(c);
+        console.log(idata);
+        const ListeDep = ["Dep1", "Dep2", "Dep3", "Dep4", "Dep5", "Dep6", "Dep7", "Dep8", "Dep9", "Dep10", "Dep11", "Dep12",];
+        const MyImage = tf.browser.fromPixels(idata);
+        const MyImage2=tf.reshape(MyImage,[1,300,600,3]);
 
-var file = e.target.files[0],                  // reference first file BLOB
-    url = URL.createObjectURL(file),           // create Object URL
-    img = new Image();                         // create image object
-  
-  img.onload = function() {                    
-    c.getContext("2d").drawImage(this, 0, 0);  // draw image onto canvas 
-  };
-
-  img.src = url;                               // convertion file to image
-};
-
-
-var idata = c.getContext('2d').getImageData(0, 0, 600,300);
-console.log(idata);
-const path_model = "MyModel/model.json";
-const ListeDep = ["Dep1", "Dep2", "Dep3", "Dep4", "Dep5", "Dep6", "Dep7", "Dep8", "Dep9", "Dep10", "Dep11", "Dep12",];
-const MyImage = tf.browser.fromPixels(idata);
-const MyImage2=tf.reshape(MyImage,[1,300,600,3]);
-
-
-
-let func= async function(){
-    const model= await tf.loadLayersModel(path_model);
-    const res = model.predict(MyImage2);
-    console.log(res);
-
-    //document.write(res);
-    document.getElementById("resultat").innerHTML = res;
-    const max = Math.max(res);
-    const z = res.indexOf(max);
-    console.log(String(z));
-    console.log(ListeDep[z]);
-
-    document.write(ListeDep[z]);
-
-};
-
-func();
-
-</script>
-
-<h1>"Résultats : " <span id="resultat"></span></h1>
-
- </head>
+        func(MyImage2);
+        console.log("test");
+      });
+      
+    });
+  </script>
+</body>
