@@ -53,7 +53,7 @@ Lreg=[
 "Provence-Alpes-CÃ´te d'Azur",
 "ÃŽle-de-France"]
 
-Lreg2=[
+Lregion=[
 "Auvergne-Rhône-Alpes",
 "Bourgogne-Franche-Comté",
 "Brittany",
@@ -90,35 +90,16 @@ for i in range(1):
     info.close()
     indice=findelt(reg,Lreg)
     Ly.append(transfo(indice,12))
+    
 
 
-print("hello")
 Lx=np.array(Lx,dtype="float64")
 Ly=np.array(Ly)
 
-model.compile(loss="MeanSquaredError",optimizer="SGD")
-model.fit(Lx,Ly)
-##
 
-print(Ly.shape)
-print(Lx.shape)
-##
-
-model.compile(loss="MeanSquaredError",optimizer="SGD")
-model.fit(Lx,Ly)
-
-model.save("D:\\Travail\\Mymodel.h5")
-##
 import tensorflowjs as tfjs
 model.compile(loss="MeanSquaredError",optimizer="SGD")
 model.fit(Lx,Ly)
 
 tfjs.converters.save_keras_model(model,"D:\\Perso\\Test Informatique\\Js Tests\\MyModel")
 
-
-##
-from keras.models import load_model
-model_new = load_model("D:\\Travail\\Mymodel.h5")
-
-
-model_new.predict(Lx)
